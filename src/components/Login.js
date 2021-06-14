@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { saveEmailNomeLogin } from '../actions';
 
 class Login extends React.Component {
   constructor() {
@@ -12,6 +14,14 @@ class Login extends React.Component {
     };
     this.renderLoginForm = this.renderLoginForm.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.executeLogin = this.executeLogin.bind(this);
+  }
+
+  executeLogin() {
+    const { loginEmailNome } = this.props;
+    const { email, name } = this.state;
+    const infoLogin = { email, name };
+    loginEmailNome(infoLogin);
   }
 
   handleChange({ target }) {
@@ -72,4 +82,12 @@ class Login extends React.Component {
   }
 }
 
-export default connect(null, null)(Login);
+const mapDispatchToProps = (dispatch) => ({
+  loginEmailNome: (infoLogin) => dispatch(saveEmailNomeLogin(infoLogin)),
+});
+
+Login.propTypes = {
+  loginEmailNome: PropTypes.function,
+}.isRequired;
+
+export default connect(null, mapDispatchToProps)(Login);

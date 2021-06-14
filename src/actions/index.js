@@ -1,6 +1,6 @@
-export const saveEmailLogin = (email) => ({
-  type: 'SAVE_EMAIL_LOGIN',
-  payload: email,
+export const saveEmailNomeLogin = (infoPlayer) => ({
+  type: 'SAVE_EMAIL_NOME_LOGIN',
+  payload: infoPlayer,
 });
 
 export const requestApi = () => ({
