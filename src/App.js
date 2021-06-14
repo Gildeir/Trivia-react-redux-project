@@ -14,7 +14,7 @@ class App extends React.Component {
         <BrowserRouter>
           <Switch>
             <Route exact path="/" component={ Login } />
-            <Route  path="/header" component={ Header } />
+            <Route path="/header" component={ Header } />
           </Switch>
         </BrowserRouter>
       </Provider>
