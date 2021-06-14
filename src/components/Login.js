@@ -1,11 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { saveEmailNomeLogin } from '../actions';
+import history from '../history';
 
 class Login extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       email: '',
       name: '',
@@ -22,6 +24,10 @@ class Login extends React.Component {
     const { email, name } = this.state;
     const infoLogin = { email, name };
     loginEmailNome(infoLogin);
+    fetch('https://opentdb.com/api_token.php?command=request')
+      .then((response) => response.json())
+      .then((response) => localStorage.setItem('token', response.token.toString()))
+      .then(() => history.push('/trivia'));
   }
 
   handleChange({ target }) {
@@ -69,6 +75,14 @@ class Login extends React.Component {
         >
           Jogar
         </button>
+
+        <Link
+          to="/settings"
+          data-testid="btn-settings"
+        >
+          Configurações
+        </Link>
+
       </form>
     );
   }
