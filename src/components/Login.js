@@ -7,6 +7,8 @@ class Login extends React.Component {
     this.state = {
       email: '',
       name: '',
+      validEmail: false,
+      validName: false,
     };
     this.renderLoginForm = this.renderLoginForm.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -17,10 +19,14 @@ class Login extends React.Component {
     this.setState({
       [name]: value,
     });
+    const { name: nome, email: endEmail } = this.state;
+    if (nome.length > 0) (this.setState({ validName: true }));
+    if (endEmail.length > 0) (this.setState({ validEmail: true }));
   }
 
   renderLoginForm() {
-    const { name, email } = this.state;
+    const { name, email, validEmail, validName } = this.state;
+    const validLogin = (validEmail && validName);
     return (
       <form>
         <label htmlFor="name">
@@ -45,6 +51,13 @@ class Login extends React.Component {
             data-testid="input-gravatar-email"
           />
         </label>
+        <button
+          type="button"
+          disabled={ !validLogin }
+          onClick={ this.executeLogin }
+        >
+          Jogar
+        </button>
       </form>
     );
   }
