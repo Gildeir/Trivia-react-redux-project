@@ -16,7 +16,7 @@ class Header extends Component {
               `https://www.gravatar.com/avatar/${hash}`
             }
             alt="gravatar"
-            data-test="header-profile-picture"
+            data-testid="header-profile-picture"
           />
         </div>
 
