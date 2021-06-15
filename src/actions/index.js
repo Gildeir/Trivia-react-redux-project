@@ -10,7 +10,7 @@ export const requestApi = () => ({
   },
 });
 
-export const setPlayer = (data) => {
+export const setPlayerAction = (data) => {
   const player = {
     ...data,
     assertions: 0,

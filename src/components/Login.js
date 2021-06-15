@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { getToken, setPlayer, saveEmailNomeLogin } from '../actions';
+import { getToken, setPlayerAction, saveEmailNomeLogin } from '../actions';
 import history from '../history';
 
 class Login extends React.Component {
@@ -25,8 +25,8 @@ class Login extends React.Component {
     const infoLogin = { email, name };
     const {
       getToken: loginGetToken,
-      setPlayer: loginSetPlayer,
-      history,
+      setPlayerLogin: loginSetPlayer,
+      // history,
     } = this.props;
     await loginGetToken();
     loginEmailNome(infoLogin);
@@ -40,7 +40,7 @@ class Login extends React.Component {
       gravatarEmail: email,
     });
 
-    history.push('game');
+    // history.push('game');
   }
 
   handleChange({ target }) {
@@ -111,8 +111,8 @@ class Login extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   loginEmailNome: (infoLogin) => dispatch(saveEmailNomeLogin(infoLogin)),
+  setPlayerLogin: (infoLogin) => dispatch(setPlayerAction(infoLogin)),
   getToken,
-  setPlayer,
 });
 
 Login.propTypes = {

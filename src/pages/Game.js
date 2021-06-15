@@ -7,7 +7,7 @@ class Game extends Component {
 
     this.state = {
       questions: [],
-      isLoading: true,
+      // isLoading: true,
     };
   }
 
@@ -22,19 +22,24 @@ class Game extends Component {
     console.log(requestQuestions);
     this.setState({
       questions: requestQuestions.results,
-      isLoading: false,
+      // isLoading: false,
     });
   }
 
   render() {
+    const { questions } = this.state;
     return (
       <div>
-        Olá
+        {
+          Object.values(questions).map((question, index) => (
+            <div key={ index }>
+              { question.question }
+            </div>
+          ))
+        }
       </div>
     );
   }
-
-
 }
 
 export default Game;
