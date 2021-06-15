@@ -14,6 +14,8 @@ const player = (state = INITIAL_PLAYER_STATE, action) => {
       email: action.payload.email,
       nome: action.payload.name,
     };
+  case 'SET_PLAYER':
+    return action.payload;
   default:
     return state;
   }
