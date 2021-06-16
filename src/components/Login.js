@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { getToken, setPlayerAction, saveEmailNomeLogin } from '../actions';
+import { setPlayerAction, saveEmailNomeLogin, fetchApiTrivia } from '../actions';
 import history from '../history';
 
 class Login extends React.Component {
@@ -20,27 +20,22 @@ class Login extends React.Component {
   }
 
   async executeLogin() {
-    const { loginEmailNome } = this.props;
+    const { loginEmailNome, fetchTrivia } = this.props;
     const { email, name } = this.state;
     const infoLogin = { email, name };
     const {
-      getToken: loginGetToken,
       setPlayerLogin: loginSetPlayer,
-      // history,
     } = this.props;
-    await loginGetToken();
     loginEmailNome(infoLogin);
     fetch('https://opentdb.com/api_token.php?command=request')
       .then((response) => response.json())
       .then((response) => localStorage.setItem('token', response.token.toString()))
-      .then(() => history.push('/trivia'));
-
+      .then(fetchTrivia())
+      .then(() => history.push('/trivia/0'));
     loginSetPlayer({
       name,
       gravatarEmail: email,
     });
-
-    // history.push('game');
   }
 
   handleChange({ target }) {
@@ -112,12 +107,14 @@ class Login extends React.Component {
 const mapDispatchToProps = (dispatch) => ({
   loginEmailNome: (infoLogin) => dispatch(saveEmailNomeLogin(infoLogin)),
   setPlayerLogin: (infoLogin) => dispatch(setPlayerAction(infoLogin)),
-  getToken,
+  fetchTrivia: () => dispatch(fetchApiTrivia()),
+
 });
 
 Login.propTypes = {
   loginEmailNome: PropTypes.function,
   getToken: PropTypes.function,
+  fetchTrivia: PropTypes.function,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }),

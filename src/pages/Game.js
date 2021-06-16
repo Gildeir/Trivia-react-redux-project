@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import * as triviaAPI from '../services/triviaAPI';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+// import * as triviaAPI from '../services/triviaAPI';
+import Header from '../components/Header';
 
 class Game extends Component {
   constructor() {
@@ -11,35 +14,30 @@ class Game extends Component {
     };
   }
 
-  componentDidMount() {
-    this.fetchTriviaAPI();
-  }
-
-  async fetchTriviaAPI() {
-    const quantityOfQuestions = 5;
-    const token = localStorage.getItem('token');
-    const requestQuestions = await triviaAPI.getQuestions(quantityOfQuestions, token);
-    console.log(requestQuestions);
-    this.setState({
-      questions: requestQuestions.results,
-      // isLoading: false,
-    });
-  }
-
   render() {
     const { questions } = this.state;
+    const { match, perguntas } = this.props;
+    const { game } = match.params;
+    console.log(game);
+    console.log((perguntas));
     return (
       <div>
-        {
-          Object.values(questions).map((question, index) => (
-            <div key={ index }>
-              { question.question }
-            </div>
-          ))
-        }
+        <Header />
+        <div>
+          Hi
+        </div>
+
       </div>
     );
   }
 }
 
-export default Game;
+Game.propTypes = {
+  loginEmailNome: PropTypes.function,
+}.isRequired;
+
+const mapStateToProps = (state) => ({
+  perguntas: state.player.query,
+});
+
+export default connect(mapStateToProps, null)(Game);

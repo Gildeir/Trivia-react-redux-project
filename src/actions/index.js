@@ -23,11 +23,32 @@ export const setPlayerAction = (data) => {
   };
 };
 
-export const logIn = (token) => ({ type: 'LOG_IN', payload: token });
+export const requestTriviaApi = () => ({
+  type: 'REQUEST_TRIVIA_API',
+  payload: {
+    isFetching: true,
+  },
+});
+export const requestTriviaApiSuccess = (queryFromApi) => ({
+  type: 'REQUEST_TRIVIA_API_SUCCESS',
+  payload: {
+    isFetching: false,
+    query: queryFromApi,
+  },
+});
+export const requestTriviaApiError = (error) => ({
+  type: 'REQUEST_TRIVIA_API_ERROR',
+  payload: {
+    isFetching: false,
+    error,
+  },
+});
 
-export const getToken = () => async (dispatch) => {
-  const reponse = await fetch('https://opentdb.com/api_token.php?command=request');
-  const { token } = await reponse.json();
-  localStorage.setItem('token', token);
-  return dispatch(logIn(token));
+export const fetchApiTrivia = () => (dispatch) => {
+  const token = localStorage.getItem('token');
+  dispatch(requestTriviaApi);
+  fetch(`https://opentdb.com/api.php?amount=5&token=${token}`)
+    .then((response) => response.json())
+    .then((success) => dispatch(requestTriviaApiSuccess(success)))
+    .catch((error) => dispatch(requestTriviaApiError(error)));
 };
