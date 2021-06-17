@@ -5,11 +5,11 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import './Game.css';
 import { fetchApiTrivia } from '../actions';
+import Chronometer from '../components/Chronometer';
 
 class Game extends Component {
   constructor() {
     super();
-
     this.renderTriviaCard = this.renderTriviaCard.bind(this);
     this.multipleCard = this.multipleCard.bind(this);
     this.booleanCard = this.booleanCard.bind(this);
@@ -18,6 +18,16 @@ class Game extends Component {
   componentDidMount() {
     const { fetchTrivia } = this.props;
     fetchTrivia();
+  }
+
+  componentDidUpdate() {
+    const { time } = this.props;
+    if (time) {
+      const buttons = document.getElementsByTagName('button');
+      for (let index = 0; index < buttons.length; index += 1) {
+        buttons[index].disabled = true;
+      }
+    }
   }
 
   multipleCard(perguntasAux, game) {
@@ -107,6 +117,7 @@ class Game extends Component {
                 { this.booleanCard(perguntasAux, game) }
               </div>)
         }
+        <Chronometer />
       </div>
     );
   }
@@ -132,6 +143,7 @@ class Game extends Component {
 
 Game.propTypes = {
   loginEmailNome: PropTypes.function,
+  time: PropTypes.bool,
 }.isRequired;
 
 const mapDispatchToProps = (dispatch) => ({
@@ -140,6 +152,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => ({
   perguntas: state.player.query,
+  time: state.player.timeOut,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
