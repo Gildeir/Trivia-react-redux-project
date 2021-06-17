@@ -19,8 +19,8 @@ class Login extends React.Component {
     this.executeLogin = this.executeLogin.bind(this);
   }
 
-  async executeLogin() {
-    const { loginEmailNome, fetchTrivia } = this.props;
+  executeLogin() {
+    const { loginEmailNome } = this.props;
     const { email, name } = this.state;
     const infoLogin = { email, name };
     const {
@@ -30,7 +30,6 @@ class Login extends React.Component {
     fetch('https://opentdb.com/api_token.php?command=request')
       .then((response) => response.json())
       .then((response) => localStorage.setItem('token', response.token.toString()))
-      .then(fetchTrivia())
       .then(() => history.push('/trivia/0'));
     loginSetPlayer({
       name,

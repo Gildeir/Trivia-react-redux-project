@@ -1,6 +1,6 @@
 const INITIAL_PLAYER_STATE = {
   email: '',
-  nome: '',
+  name: '',
   assertions: '',
   score: 0,
   gravatarEmail: '',
@@ -12,7 +12,7 @@ const player = (state = INITIAL_PLAYER_STATE, action) => {
     return {
       ...state,
       email: action.payload.email,
-      nome: action.payload.name,
+      name: action.payload.name,
     };
   case 'SET_PLAYER':
     return action.payload;
