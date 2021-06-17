@@ -9,3 +9,46 @@ export const requestApi = () => ({
     isFetching: true,
   },
 });
+
+export const setPlayerAction = (data) => {
+  const player = {
+    ...data,
+    assertions: 0,
+    score: 0,
+  };
+  localStorage.setItem('state', JSON.stringify({ player }));
+  return {
+    type: 'SET_PLAYER',
+    payload: player,
+  };
+};
+
+export const requestTriviaApi = () => ({
+  type: 'REQUEST_TRIVIA_API',
+  payload: {
+    isFetching: true,
+  },
+});
+export const requestTriviaApiSuccess = (queryFromApi) => ({
+  type: 'REQUEST_TRIVIA_API_SUCCESS',
+  payload: {
+    isFetching: false,
+    query: queryFromApi,
+  },
+});
+export const requestTriviaApiError = (error) => ({
+  type: 'REQUEST_TRIVIA_API_ERROR',
+  payload: {
+    isFetching: false,
+    error,
+  },
+});
+
+export const fetchApiTrivia = () => (dispatch) => {
+  const token = localStorage.getItem('token');
+  dispatch(requestTriviaApi);
+  fetch(`https://opentdb.com/api.php?amount=5&token=${token}`)
+    .then((response) => response.json())
+    .then((success) => dispatch(requestTriviaApiSuccess(success)))
+    .catch((error) => dispatch(requestTriviaApiError(error)));
+};
