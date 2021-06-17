@@ -10,9 +10,17 @@ class Game extends Component {
   constructor() {
     super();
 
+    this.state = {
+      green: '',
+      red: '',
+    };
+
     this.renderTriviaCard = this.renderTriviaCard.bind(this);
     this.multipleCard = this.multipleCard.bind(this);
     this.booleanCard = this.booleanCard.bind(this);
+    this.handleClass = this.handleClass.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.renderCorrectTrue = this.renderCorrectTrue(this);
   }
 
   componentDidMount() {
@@ -20,29 +28,45 @@ class Game extends Component {
     fetchTrivia();
   }
 
+  handleClass() {
+    this.setState({
+      green: 'green',
+      red: 'red',
+    });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+  }
+
   multipleCard(perguntasAux, game) {
+    const { green, red } = this.state;
     const n = 0.5;
     const incorrrectAnswers = perguntasAux.results[game].incorrect_answers
       .map((ic, index) => (
         <button
           type="button"
-          data-testid={ `wrong-answer-${index}` }
           key={ index }
+          className={ red }
+          data-testid={ `wrong-answer-${index}` }
+          onClick={ (event) => this.handleClass(event) }
         >
           { ic }
         </button>));
     const correctAnswer = (
       <button
         type="button"
+        key="correct"
+        className={ green }
         data-testid="correct-answer"
-        key="3"
+        onClick={ (event) => this.handleClass(event) }
       >
         { perguntasAux.results[game].correct_answer }
       </button>);
     let allAnswers = [...incorrrectAnswers, correctAnswer];
     allAnswers = allAnswers.sort(() => Math.random() - n);
     return (
-      <div>
+      <form onSubmit={ this.handleSubmit }>
         <div data-testid="question-category">
           {' '}
           {perguntasAux.results[game].category}
@@ -59,11 +83,12 @@ class Game extends Component {
             ))
           }
         </div>
-      </div>
+      </form>
     );
   }
 
   booleanCard(perguntasAux, game) {
+    const { green, red } = this.state;
     return (
       <div>
         <div data-testid="question-category">
@@ -80,17 +105,60 @@ class Game extends Component {
           (perguntasAux.results[game].correct_answer === 'True')
             ? (
               <div>
-                <button type="button" data-testid="correct-answer">True </button>
-                <button type="button" data-testid="wrong-answer-0">False</button>
-              </div>)
+
+                {this.renderCorrectTrue()}
+
+              </div>
+
+            )
             : (
               <div>
-                <button type="button" data-testid="wrong-answer-0">True</button>
-                <button type="button" data-testid="correct-answer">False </button>
+                <button
+                  type="button"
+                  className={ red }
+                  data-testid="wrong-answer-0"
+                  onClick={ (event) => this.handleClass(event) }
+                >
+                  True
+                </button>
+                <button
+                  type="button"
+                  key="correct"
+                  className={ green }
+                  data-testid="correct-answer"
+                  onClick={ (event) => this.handleClass(event) }
+                >
+                  False
+                </button>
               </div>)
         }
-
       </div>);
+  }
+
+  renderCorrectTrue() {
+    const { green, red } = this.state;
+    return (
+      <div>
+        <button
+          type="button"
+          key="correct"
+          className={ green }
+          data-testid="correct-answer"
+          onClick={ (event) => this.handleClass(event) }
+        >
+          True
+        </button>
+        <button
+          type="button"
+          className={ red }
+          data-testid="wrong-answer-0"
+          onClick={ (event) => this.handleClass(event) }
+        >
+          False
+        </button>
+      </div>
+
+    );
   }
 
   renderTriviaCard(perguntasAux, game) {
