@@ -15,16 +15,16 @@ class Game extends Component {
   }
 
   render() {
-    const { questions } = this.state;
     const { match, perguntas } = this.props;
     const { game } = match.params;
+    const perguntasAux = { ...perguntas };
     console.log(game);
-    console.log((perguntas));
+    console.log(perguntasAux.results);
     return (
       <div>
         <Header />
         <div>
-          Hi
+          { (perguntasAux.results === undefined) ? <h1> carregando </h1> : perguntasAux.results[game].category }
         </div>
 
       </div>
