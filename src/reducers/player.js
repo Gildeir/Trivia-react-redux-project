@@ -4,6 +4,7 @@ const INITIAL_PLAYER_STATE = {
   assertions: '',
   score: 0,
   gravatarEmail: '',
+  timeOut: false,
 };
 
 const player = (state = INITIAL_PLAYER_STATE, action) => {
@@ -38,6 +39,11 @@ const player = (state = INITIAL_PLAYER_STATE, action) => {
       ...state,
       assertions: state.assertions + action.payload.correctAnswer,
       score: state.score + action.payload.answerPoints,
+    };
+  case 'TIME_OUT':
+    return {
+      ...state,
+      timeOut: action.payload.timeOut,
     };
   default:
     return state;

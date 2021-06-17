@@ -59,3 +59,10 @@ export const pointsPlayer = (points) => ({
     points,
   },
 });
+
+export const timeOut = (condition) => ({
+  type: 'TIME_OUT',
+  payload: {
+    timeOut: condition,
+  },
+});
