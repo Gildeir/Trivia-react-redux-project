@@ -52,3 +52,10 @@ export const fetchApiTrivia = () => (dispatch) => {
     .then((success) => dispatch(requestTriviaApiSuccess(success)))
     .catch((error) => dispatch(requestTriviaApiError(error)));
 };
+
+export const pointsPlayer = (points) => ({
+  type: 'POINTS_PLAYER',
+  payload: {
+    points,
+  },
+});

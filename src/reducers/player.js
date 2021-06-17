@@ -33,6 +33,12 @@ const player = (state = INITIAL_PLAYER_STATE, action) => {
       isFetching: action.payload.isFetching,
       error: action.payload.error,
     };
+  case 'POINTS_PLAYER':
+    return {
+      ...state,
+      assertions: state.assertions + action.payload.correctAnswer,
+      score: state.score + action.payload.answerPoints,
+    };
   default:
     return state;
   }
