@@ -4,6 +4,7 @@ const INITIAL_PLAYER_STATE = {
   assertions: '',
   score: 0,
   gravatarEmail: '',
+  timeOut: false,
 };
 
 const player = (state = INITIAL_PLAYER_STATE, action) => {
@@ -32,6 +33,11 @@ const player = (state = INITIAL_PLAYER_STATE, action) => {
       ...state,
       isFetching: action.payload.isFetching,
       error: action.payload.error,
+    };
+  case 'TIME_OUT':
+    return {
+      ...state,
+      timeOut: action.payload.timeOut,
     };
   default:
     return state;
