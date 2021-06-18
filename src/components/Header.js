@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 class Header extends Component {
   render() {
-    const { emailDoUsuário, userName } = this.props;
+    const { emailDoUsuário, userName, score } = this.props;
     const hash = md5(emailDoUsuário).toString();
 
     return (
@@ -26,7 +26,11 @@ class Header extends Component {
           </span>
         </div>
         <div>
-          <span data-testid="header-score"> 0 </span>
+          <span data-testid="header-score">
+            {' '}
+            { score }
+            {' '}
+          </span>
         </div>
       </header>
     );
@@ -36,6 +40,7 @@ class Header extends Component {
 const mapStateToProps = (state) => ({
   emailDoUsuário: state.player.email,
   userName: state.player.name,
+  score: state.player.score,
 });
 
 Header.propTypes = {

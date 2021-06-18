@@ -40,11 +40,12 @@ const player = (state = INITIAL_PLAYER_STATE, action) => {
       assertions: state.assertions + action.payload.correctAnswer,
       score: state.score + action.payload.answerPoints,
     };
-  case 'TIME_OUT':
+  case 'SET_SCORE':
     return {
       ...state,
-      timeOut: action.payload.timeOut,
+      score: action.payload.score,
     };
+
   default:
     return state;
   }

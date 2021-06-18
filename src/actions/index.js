@@ -66,3 +66,17 @@ export const timeOut = (condition) => ({
     timeOut: condition,
   },
 });
+
+export const timeRemain = (time) => ({
+  type: 'TIME_REMAIN',
+  payload: {
+    time,
+  },
+});
+
+export const setScore = (score) => ({
+  type: 'SET_SCORE',
+  payload: {
+    score,
+  },
+});

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import './Game.css';
-import { fetchApiTrivia, pointsPlayer } from '../actions';
+import { fetchApiTrivia, pointsPlayer, setScore } from '../actions';
 import Chronometer from '../components/Chronometer';
 
 class Game extends Component {
@@ -18,11 +18,11 @@ class Game extends Component {
     this.multipleCard = this.multipleCard.bind(this);
     this.booleanCard = this.booleanCard.bind(this);
     this.difficultyFormula = this.difficultyFormula.bind(this);
-    this.checkAnswers = this.checkAnswers.bind(this);
-    this.sumOfpoints = this.sumOfpoints.bind(this);
     this.handleClass = this.handleClass.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.renderCorrectTrue = this.renderCorrectTrue(this);
+    this.renderCorrectTrue = this.renderCorrectTrue.bind(this);
+    this.score = this.score.bind(this);
+    this.setPlayerLocalStorage = this.setPlayerLocalStorage.bind(this);
   }
 
   componentDidMount() {
@@ -42,40 +42,42 @@ class Game extends Component {
     }
   }
 
-  difficultyFormula(difficulty) {
-    const hard = 3;
-    let difficultyValue = 0;
-    if (difficulty === 'easy') {
-      difficultyValue = 1;
-    } else if (difficulty === 'medium') {
-      difficultyValue = 2;
-    } else { difficultyValue = hard; }
-    return difficultyValue;
+  setPlayerLocalStorage() {
+    const { player } = this.props;
+    // localStorage.setItem('player', player);
+    localStorage.setItem('player', JSON.stringify({ player }));
   }
 
-  checkAnswers(target, perguntasAux, game) {
-    const { playerPointsAction, player } = this.props;
-    console.log(`player: ${perguntasAux}`);
-    const { name, assertions, score, gravatarEmail } = player;
-    if (perguntasAux.results[game].correct_answer === 'correct-answer') {
-      const correctAnswer = 1;
-      const answerPoints = this.sumOfpoints();
-      const estadoTemporario = {
-        player: {
-          name,
-          assertions: assertions + correctAnswer,
-          score: score + answerPoints,
-          gravatarEmail,
-        },
-      };
-      playerPointsAction({ correctAnswer, answerPoints });
-      localStorage.setItem('state', JSON.stringify(estadoTemporario));
+  difficultyFormula(difficulty) {
+    const hard = 3;
+    const medium = 2;
+    const easy = 1;
+    switch (difficulty) {
+    case 'hard':
+      return hard;
+    case 'medium':
+      return medium;
+    default:
+      return easy;
     }
   }
 
-  sumOfpoints() {
-    const points = 3;
-    return points;
+  score() {
+    const ten = 10;
+    const { timeRemaining, perguntas, player, setScoreAction, match } = this.props;
+    const { game } = match.params;
+    const perguntasAux = { ...perguntas };
+    console.log(perguntasAux.results[game].difficulty);
+    const answerPoints = ten
+      + (timeRemaining
+        * this.difficultyFormula(perguntasAux.results[game].difficulty) + player.score);
+    setScoreAction(answerPoints);
+    this.setPlayerLocalStorage();
+  }
+
+  pontuar(event) {
+    this.handleClass(event);
+    this.score();
   }
 
   handleClass() {
@@ -109,7 +111,7 @@ class Game extends Component {
         key="correct"
         className={ green }
         data-testid="correct-answer"
-        onClick={ (event) => this.handleClass(event) }
+        onClick={ (event) => this.pontuar(event) }
       >
         { perguntasAux.results[game].correct_answer }
       </button>);
@@ -173,7 +175,7 @@ class Game extends Component {
                   key="correct"
                   className={ green }
                   data-testid="correct-answer"
-                  onClick={ (event) => this.handleClass(event) }
+                  onClick={ (event) => this.pontuar(event) }
                 >
                   False
                 </button>
@@ -191,7 +193,7 @@ class Game extends Component {
           key="correct"
           className={ green }
           data-testid="correct-answer"
-          onClick={ (event) => this.handleClass(event) }
+          onClick={ (event) => this.pontuar(event) }
         >
           True
         </button>
@@ -227,7 +229,6 @@ class Game extends Component {
   }
 
   render() {
-    console.log(pointsPlayer);
     const { match, perguntas } = this.props;
     const { game } = match.params;
     const perguntasAux = { ...perguntas };
@@ -253,12 +254,14 @@ Game.propTypes = {
 const mapDispatchToProps = (dispatch) => ({
   fetchTrivia: () => dispatch(fetchApiTrivia()),
   playerPointsAction: () => dispatch(pointsPlayer),
+  setScoreAction: (points) => dispatch(setScore(points)),
 });
 
 const mapStateToProps = (state) => ({
   perguntas: state.player.query,
   player: state.player,
-  time: state.player.timeOut,
+  time: state.game.timeOut,
+  timeRemaining: state.game.time,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
