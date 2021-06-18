@@ -31,18 +31,6 @@ class Game extends Component {
     fetchTrivia();
   }
 
-  componentDidUpdate() {
-    const {
-      time,
-    } = this.props;
-    if (time) {
-      const buttons = document.getElementsByTagName('button');
-      for (let index = 0; index < buttons.length; index += 1) {
-        buttons[index].disabled = true;
-      }
-    }
-  }
-
   score() {
     const ten = 10;
     const { timeRemaining, perguntas, player, setScoreAction, match } = this.props;
@@ -75,6 +63,7 @@ class Game extends Component {
 
   multipleCard(perguntasAux, game) {
     const { green, red } = this.state;
+    const { time } = this.props;
     const n = 0.5;
     const incorrrectAnswers = perguntasAux.results[game].incorrect_answers
       .map((ic, index) => (
@@ -83,6 +72,7 @@ class Game extends Component {
           key={ index }
           className={ red }
           data-testid={ `wrong-answer-${index}` }
+          disabled={ time }
           onClick={ (event) => this.handleClass(event) }
         >
           { ic }
@@ -93,6 +83,7 @@ class Game extends Component {
         key="correct"
         className={ green }
         data-testid="correct-answer"
+        disabled={ time }
         onClick={ (event) => this.pontuar(event) }
       >
         { perguntasAux.results[game].correct_answer }
@@ -121,6 +112,7 @@ class Game extends Component {
 
   booleanCard(perguntasAux, game) {
     const { green, red } = this.state;
+    const { time } = this.props;
     return (
       <div>
         <div data-testid="question-category">
@@ -146,6 +138,7 @@ class Game extends Component {
                   type="button"
                   className={ red }
                   data-testid="wrong-answer-0"
+                  disabled={ time }
                   onClick={ (event) => this.handleClass(event) }
                 >
                   True
@@ -155,6 +148,7 @@ class Game extends Component {
                   key="correct"
                   className={ green }
                   data-testid="correct-answer"
+                  disabled={ time }
                   onClick={ (event) => this.pontuar(event) }
                 >
                   False
@@ -166,6 +160,7 @@ class Game extends Component {
 
   renderCorrectTrue() {
     const { green, red } = this.state;
+    const { time } = this.props;
     return (
       <div>
         <button
@@ -173,6 +168,7 @@ class Game extends Component {
           key="correct"
           className={ green }
           data-testid="correct-answer"
+          disabled={ time }
           onClick={ (event) => this.pontuar(event) }
         >
           True
@@ -181,6 +177,7 @@ class Game extends Component {
           type="button"
           className={ red }
           data-testid="wrong-answer-0"
+          disabled={ time }
           onClick={ (event) => this.handleClass(event) }
         >
           False
@@ -204,7 +201,7 @@ class Game extends Component {
                 { this.booleanCard(perguntasAux, game) }
               </div>)
         }
-        <Chronometer />
+        <Chronometer game={ game } />
         <NextButton display={ displayIs } game={ game } />
       </div>
     );
