@@ -34,11 +34,18 @@ const player = (state = INITIAL_PLAYER_STATE, action) => {
       isFetching: action.payload.isFetching,
       error: action.payload.error,
     };
-  case 'TIME_OUT':
+  case 'POINTS_PLAYER':
     return {
       ...state,
-      timeOut: action.payload.timeOut,
+      assertions: state.assertions + action.payload.correctAnswer,
+      score: state.score + action.payload.answerPoints,
     };
+  case 'SET_SCORE':
+    return {
+      ...state,
+      score: action.payload.score,
+    };
+
   default:
     return state;
   }

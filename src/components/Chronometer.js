@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { timeOut } from '../actions';
+import { timeOut, timeRemain } from '../actions';
 
 class Chronometer extends React.Component {
   constructor() {
@@ -30,12 +30,14 @@ class Chronometer extends React.Component {
 
   countDown() {
     const ONE_SEC = 1000;
+    const { timeRemainAction } = this.props;
     this.myInterval = setInterval(() => {
       const { seconds } = this.state;
       if (seconds > 0) {
         this.setState({
           seconds: seconds - 1,
         });
+        timeRemainAction(seconds - 1);
       }
     }, ONE_SEC);
   }
@@ -54,6 +56,7 @@ class Chronometer extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   time: (condition) => dispatch(timeOut(condition)),
+  timeRemainAction: (condition) => dispatch(timeRemain(condition)),
 });
 
 Chronometer.propTypes = {

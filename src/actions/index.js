@@ -53,9 +53,30 @@ export const fetchApiTrivia = () => (dispatch) => {
     .catch((error) => dispatch(requestTriviaApiError(error)));
 };
 
+export const pointsPlayer = (points) => ({
+  type: 'POINTS_PLAYER',
+  payload: {
+    points,
+  },
+});
+
 export const timeOut = (condition) => ({
   type: 'TIME_OUT',
   payload: {
     timeOut: condition,
+  },
+});
+
+export const timeRemain = (time) => ({
+  type: 'TIME_REMAIN',
+  payload: {
+    time,
+  },
+});
+
+export const setScore = (score) => ({
+  type: 'SET_SCORE',
+  payload: {
+    score,
   },
 });

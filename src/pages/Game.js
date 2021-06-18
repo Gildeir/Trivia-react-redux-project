@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-// import * as triviaAPI from '../services/triviaAPI';
 import Header from '../components/Header';
+import NextButton from '../components/NextButton';
 import './Game.css';
-import { fetchApiTrivia } from '../actions';
+import { fetchApiTrivia, pointsPlayer, setScore } from '../actions';
 import Chronometer from '../components/Chronometer';
+import { setPlayerLocalStorage, difficultyFormula } from '../helpers/gameFunctions';
 
 class Game extends Component {
   constructor() {
     super();
-
     this.state = {
       green: '',
       red: '',
+      displayIs: 'dontShow',
     };
 
     this.renderTriviaCard = this.renderTriviaCard.bind(this);
@@ -21,7 +22,8 @@ class Game extends Component {
     this.booleanCard = this.booleanCard.bind(this);
     this.handleClass = this.handleClass.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.renderCorrectTrue = this.renderCorrectTrue(this);
+    this.renderCorrectTrue = this.renderCorrectTrue.bind(this);
+    this.score = this.score.bind(this);
   }
 
   componentDidMount() {
@@ -30,7 +32,9 @@ class Game extends Component {
   }
 
   componentDidUpdate() {
-    const { time } = this.props;
+    const {
+      time,
+    } = this.props;
     if (time) {
       const buttons = document.getElementsByTagName('button');
       for (let index = 0; index < buttons.length; index += 1) {
@@ -39,10 +43,29 @@ class Game extends Component {
     }
   }
 
+  score() {
+    const ten = 10;
+    const { timeRemaining, perguntas, player, setScoreAction, match } = this.props;
+    const { game } = match.params;
+    const perguntasAux = { ...perguntas };
+    console.log(perguntasAux.results[game].difficulty);
+    const answerPoints = ten
+      + (timeRemaining
+        * difficultyFormula(perguntasAux.results[game].difficulty) + player.score);
+    setScoreAction(answerPoints);
+    setPlayerLocalStorage(answerPoints, player);
+  }
+
+  pontuar(event) {
+    this.handleClass(event);
+    this.score();
+  }
+
   handleClass() {
     this.setState({
       green: 'green',
       red: 'red',
+      displayIs: 'show',
     });
   }
 
@@ -70,7 +93,7 @@ class Game extends Component {
         key="correct"
         className={ green }
         data-testid="correct-answer"
-        onClick={ (event) => this.handleClass(event) }
+        onClick={ (event) => this.pontuar(event) }
       >
         { perguntasAux.results[game].correct_answer }
       </button>);
@@ -79,12 +102,10 @@ class Game extends Component {
     return (
       <form onSubmit={ this.handleSubmit }>
         <div data-testid="question-category">
-          {' '}
           {perguntasAux.results[game].category}
           {' '}
         </div>
         <div data-testid="question-text">
-          {' '}
           {perguntasAux.results[game].question}
           {' '}
         </div>
@@ -116,11 +137,8 @@ class Game extends Component {
           (perguntasAux.results[game].correct_answer === 'True')
             ? (
               <div>
-
                 {this.renderCorrectTrue()}
-
               </div>
-
             )
             : (
               <div>
@@ -137,7 +155,7 @@ class Game extends Component {
                   key="correct"
                   className={ green }
                   data-testid="correct-answer"
-                  onClick={ (event) => this.handleClass(event) }
+                  onClick={ (event) => this.pontuar(event) }
                 >
                   False
                 </button>
@@ -155,7 +173,7 @@ class Game extends Component {
           key="correct"
           className={ green }
           data-testid="correct-answer"
-          onClick={ (event) => this.handleClass(event) }
+          onClick={ (event) => this.pontuar(event) }
         >
           True
         </button>
@@ -168,11 +186,11 @@ class Game extends Component {
           False
         </button>
       </div>
-
     );
   }
 
   renderTriviaCard(perguntasAux, game) {
+    const { displayIs } = this.state;
     return (
       <div>
         {
@@ -187,6 +205,7 @@ class Game extends Component {
               </div>)
         }
         <Chronometer />
+        <NextButton display={ displayIs } game={ game } />
       </div>
     );
   }
@@ -204,7 +223,6 @@ class Game extends Component {
               ? <h1> carregando </h1> : this.renderTriviaCard(perguntasAux, game)
           }
         </div>
-
       </div>
     );
   }
@@ -217,11 +235,15 @@ Game.propTypes = {
 
 const mapDispatchToProps = (dispatch) => ({
   fetchTrivia: () => dispatch(fetchApiTrivia()),
+  playerPointsAction: () => dispatch(pointsPlayer),
+  setScoreAction: (points) => dispatch(setScore(points)),
 });
 
 const mapStateToProps = (state) => ({
   perguntas: state.player.query,
-  time: state.player.timeOut,
+  player: state.player,
+  time: state.game.timeOut,
+  timeRemaining: state.game.time,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
