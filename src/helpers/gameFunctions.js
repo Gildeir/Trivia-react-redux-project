@@ -1,7 +1,8 @@
 export function setPlayerLocalStorage(answerPoints, player) {
-  let playerAux = { ...player };
-  playerAux = { ...playerAux, score: answerPoints };
-  localStorage.setItem('player', JSON.stringify({ playerAux }));
+  // let playerAux = { ...player };
+  // playerAux = { ...playerAux, score: answerPoints };
+  localStorage.setItem('state',
+    JSON.stringify({ player: { ...player, score: answerPoints } }));
 }
 
 export function difficultyFormula(difficulty) {

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
+import NextButton from '../components/NextButton';
 import './Game.css';
 import { fetchApiTrivia, pointsPlayer, setScore } from '../actions';
 import Chronometer from '../components/Chronometer';
@@ -13,6 +14,7 @@ class Game extends Component {
     this.state = {
       green: '',
       red: '',
+      displayIs: 'dontShow',
     };
 
     this.renderTriviaCard = this.renderTriviaCard.bind(this);
@@ -63,6 +65,7 @@ class Game extends Component {
     this.setState({
       green: 'green',
       red: 'red',
+      displayIs: 'show',
     });
   }
 
@@ -99,12 +102,10 @@ class Game extends Component {
     return (
       <form onSubmit={ this.handleSubmit }>
         <div data-testid="question-category">
-          {' '}
           {perguntasAux.results[game].category}
           {' '}
         </div>
         <div data-testid="question-text">
-          {' '}
           {perguntasAux.results[game].question}
           {' '}
         </div>
@@ -189,6 +190,7 @@ class Game extends Component {
   }
 
   renderTriviaCard(perguntasAux, game) {
+    const { displayIs } = this.state;
     return (
       <div>
         {
@@ -203,6 +205,7 @@ class Game extends Component {
               </div>)
         }
         <Chronometer />
+        <NextButton display={ displayIs } game={ game } />
       </div>
     );
   }
