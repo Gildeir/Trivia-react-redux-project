@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import './Game.css';
 import { fetchApiTrivia, pointsPlayer, setScore } from '../actions';
 import Chronometer from '../components/Chronometer';
+import { setPlayerLocalStorage, difficultyFormula } from '../helpers/gameFunctions';
 
 class Game extends Component {
   constructor() {
@@ -17,12 +18,10 @@ class Game extends Component {
     this.renderTriviaCard = this.renderTriviaCard.bind(this);
     this.multipleCard = this.multipleCard.bind(this);
     this.booleanCard = this.booleanCard.bind(this);
-    this.difficultyFormula = this.difficultyFormula.bind(this);
     this.handleClass = this.handleClass.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.renderCorrectTrue = this.renderCorrectTrue.bind(this);
     this.score = this.score.bind(this);
-    this.setPlayerLocalStorage = this.setPlayerLocalStorage.bind(this);
   }
 
   componentDidMount() {
@@ -42,26 +41,6 @@ class Game extends Component {
     }
   }
 
-  setPlayerLocalStorage() {
-    const { player } = this.props;
-    // localStorage.setItem('player', player);
-    localStorage.setItem('player', JSON.stringify({ player }));
-  }
-
-  difficultyFormula(difficulty) {
-    const hard = 3;
-    const medium = 2;
-    const easy = 1;
-    switch (difficulty) {
-    case 'hard':
-      return hard;
-    case 'medium':
-      return medium;
-    default:
-      return easy;
-    }
-  }
-
   score() {
     const ten = 10;
     const { timeRemaining, perguntas, player, setScoreAction, match } = this.props;
@@ -70,9 +49,9 @@ class Game extends Component {
     console.log(perguntasAux.results[game].difficulty);
     const answerPoints = ten
       + (timeRemaining
-        * this.difficultyFormula(perguntasAux.results[game].difficulty) + player.score);
+        * difficultyFormula(perguntasAux.results[game].difficulty) + player.score);
     setScoreAction(answerPoints);
-    this.setPlayerLocalStorage();
+    setPlayerLocalStorage(answerPoints, player);
   }
 
   pontuar(event) {
