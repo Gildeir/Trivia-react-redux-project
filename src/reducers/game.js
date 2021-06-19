@@ -1,5 +1,6 @@
 const INITIAL_GAME = {
   time: 30,
+  timeOut: false,
 };
 
 const game = (state = INITIAL_GAME, action) => {

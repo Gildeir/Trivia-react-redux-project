@@ -6,9 +6,6 @@ import { timeOut, timeRemain } from '../actions';
 class Chronometer extends React.Component {
   constructor() {
     super();
-    this.state = {
-      seconds: 30,
-    };
     this.countDown = this.countDown.bind(this);
   }
 
@@ -17,11 +14,12 @@ class Chronometer extends React.Component {
   }
 
   componentDidUpdate() {
-    const { time } = this.props;
-    const { seconds } = this.state;
-    if (seconds === 0) {
+    const { time, timeRemaining } = this.props;
+    const FULL_TIME = 30;
+    if (timeRemaining === 0) {
       time(true);
     }
+    if (timeRemaining === FULL_TIME) { this.countDown(); }
   }
 
   componentWillUnmount() {
@@ -30,23 +28,22 @@ class Chronometer extends React.Component {
 
   countDown() {
     const ONE_SEC = 1000;
-    const { timeRemainAction } = this.props;
     this.myInterval = setInterval(() => {
-      const { seconds } = this.state;
-      if (seconds > 0) {
-        this.setState({
-          seconds: seconds - 1,
-        });
-        timeRemainAction(seconds - 1);
-      }
+      const { timeRemainAction, timeRemaining } = this.props;
+      let seconds = timeRemaining;
+      if (seconds > 0) { seconds -= 1; }
+      timeRemainAction(seconds);
     }, ONE_SEC);
   }
 
   render() {
-    const { seconds } = this.state;
+    const { timeRemaining } = this.props;
+    if (timeRemaining === 0) {
+      clearInterval(this.myInterval);
+    }
     return (
       <h3>
-        {seconds}
+        {timeRemaining}
         {' '}
         left
       </h3>
@@ -59,8 +56,12 @@ const mapDispatchToProps = (dispatch) => ({
   timeRemainAction: (condition) => dispatch(timeRemain(condition)),
 });
 
+const mapStateToProps = (state) => ({
+  timeRemaining: state.game.time,
+});
+
 Chronometer.propTypes = {
   time: PropTypes.function,
 }.isRequired;
 
-export default connect(null, mapDispatchToProps)(Chronometer);
+export default connect(mapStateToProps, mapDispatchToProps)(Chronometer);

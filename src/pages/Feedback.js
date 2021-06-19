@@ -31,18 +31,16 @@ class Feedback extends Component {
     );
   }
 
-  render() {
-    return (
-      <div>
-        <Header />
+import Header from '../components/Header';
+
+class Feedback extends Component {
+    
         <p data-testid="feedback-text">
           {this.renderMessage()}
           {this.renderResults() }
         </p>
-      </div>
-    );
-  }
-}
+        <p>Feedback</p>
+        <p data-testid="feedback-text">Feedback</p>
 
 Feedback.propTypes = {
   assertions: PropTypes.number.isRequired,
@@ -59,3 +57,4 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps)(Feedback);
+
