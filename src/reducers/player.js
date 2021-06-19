@@ -1,7 +1,7 @@
 const INITIAL_PLAYER_STATE = {
   email: '',
   name: '',
-  assertions: '',
+  assertions: 0,
   score: 0,
   gravatarEmail: '',
   timeOut: false,
@@ -44,6 +44,7 @@ const player = (state = INITIAL_PLAYER_STATE, action) => {
     return {
       ...state,
       score: action.payload.score,
+      assertions: state.assertions + 1,
     };
 
   default:

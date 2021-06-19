@@ -9,6 +9,7 @@ import Header from './components/Header';
 import history from './history';
 import Settings from './pages/Settings';
 import Game from './pages/Game';
+import Feedback from './pages/Feedback';
 
 class App extends React.Component {
   render() {
@@ -19,6 +20,7 @@ class App extends React.Component {
             <Route exact path="/" component={ Login } />
             <Route path="/header" component={ Header } />
             <Route path="/settings" component={ Settings } />
+            <Route path="/feedback" component={ Feedback } />
             <Route path="/trivia/:game" render={ (props) => <Game { ...props } /> } />
           </Switch>
         </Router>
