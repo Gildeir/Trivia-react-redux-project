@@ -22,6 +22,7 @@ class App extends React.Component {
             <Route path="/settings" component={ Settings } />
             <Route path="/feedback" component={ Feedback } />
             <Route path="/trivia/:game" render={ (props) => <Game { ...props } /> } />
+            <Route path="/feedback" component={ Feedback } />
           </Switch>
         </Router>
       </Provider>
