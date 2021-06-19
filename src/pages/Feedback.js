@@ -21,8 +21,12 @@ class Feedback extends Component {
     const { assertions, score } = this.props;
     return (
       <div>
-        <p data-testid="feedback-total-question">{assertions}</p>
-        <p data-testid="feedback-total-score">{score}</p>
+        <div>
+          <p data-testid="feedback-total-question">{assertions}</p>
+        </div>
+        <div>
+          <p data-testid="feedback-total-score">{score}</p>
+        </div>
       </div>
     );
   }
