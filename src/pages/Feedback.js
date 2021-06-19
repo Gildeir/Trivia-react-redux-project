@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
+import history from '../history';
 
 class Feedback extends Component {
   constructor(props) {
@@ -39,6 +40,13 @@ class Feedback extends Component {
           {this.renderMessage()}
           {this.renderResults() }
         </p>
+        <button
+          type="button"
+          data-testid="btn-play-again"
+          onClick={ () => history.push('/') }
+        >
+          Jogue novamente
+        </button>
       </div>
     );
   }
