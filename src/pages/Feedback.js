@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import Header from '../components/Header';
 
 class Feedback extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.renderMessage = this.renderMessage.bind(this);
     this.renderResults = this.renderResults.bind(this);
   }
@@ -21,23 +21,25 @@ class Feedback extends Component {
     const { assertions, score } = this.props;
     return (
       <div>
-        <p data-testid="feedback-total-question">{assertions}</p>
-        <p data-testid="feedback-total-score">{score}</p>
+        <p data-testid="feedback-total-question">
+          {assertions}
+        </p>
+        <p data-testid="feedback-total-score">
+          {score}
+        </p>
       </div>
     );
   }
 
   render() {
     return (
-      <>
+      <div>
         <Header />
-        <div>
-          <p data-testid="feedback-text">
-            {this.renderMessage()}
-            {this.renderResults() }
-          </p>
-        </div>
-      </>
+        <p data-testid="feedback-text">
+          {this.renderMessage()}
+          {this.renderResults() }
+        </p>
+      </div>
     );
   }
 }
@@ -47,15 +49,13 @@ Feedback.propTypes = {
   score: PropTypes.number.isRequired,
 };
 
-// Feedback.defaultProps = { assertions: 0 };
+// Feedback.defaultProps = {
+//   assertions: 0,
+// };
 
 const mapStateToProps = (state) => ({
   assertions: state.player.assertions,
   score: state.player.score,
 });
-
-// const mapDispatchToProps = {
-
-// };
 
 export default connect(mapStateToProps)(Feedback);

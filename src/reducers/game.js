@@ -14,6 +14,23 @@ const game = (state = INITIAL_GAME, action) => {
       ...state,
       timeOut: action.payload.timeOut,
     };
+  case 'REQUEST_TRIVIA_API':
+    return {
+      ...state,
+      isFetching: action.payload.isFetching,
+    };
+  case 'REQUEST_TRIVIA_API_SUCCESS':
+    return {
+      ...state,
+      isFetching: action.payload.isFetching,
+      query: action.payload.query,
+    };
+  case 'REQUEST_TRIVIA_API_ERROR':
+    return {
+      ...state,
+      isFetching: action.payload.isFetching,
+      error: action.payload.error,
+    };
   default:
     return state;
   }

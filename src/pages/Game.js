@@ -239,7 +239,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  perguntas: state.player.query,
+  perguntas: state.game.query,
   player: state.player,
   time: state.game.timeOut,
   timeRemaining: state.game.time,
