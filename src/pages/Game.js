@@ -36,10 +36,9 @@ class Game extends Component {
     const { timeRemaining, perguntas, player, setScoreAction, match } = this.props;
     const { game } = match.params;
     const perguntasAux = { ...perguntas };
-    console.log(perguntasAux.results[game].difficulty);
     const answerPoints = ten
-      + (timeRemaining
-        * difficultyFormula(perguntasAux.results[game].difficulty) + player.score);
+    + (timeRemaining
+      * difficultyFormula(perguntasAux.results[game].difficulty) + player.score);
     setScoreAction(answerPoints);
     setPlayerLocalStorage(answerPoints, player);
   }
@@ -237,7 +236,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  perguntas: state.player.query,
+  perguntas: state.game.query,
   player: state.player,
   time: state.game.timeOut,
   timeRemaining: state.game.time,

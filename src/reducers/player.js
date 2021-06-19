@@ -1,7 +1,7 @@
 const INITIAL_PLAYER_STATE = {
   email: '',
   name: '',
-  assertions: '',
+  assertions: 0,
   score: 0,
   gravatarEmail: '',
   timeOut: false,
@@ -17,23 +17,6 @@ const player = (state = INITIAL_PLAYER_STATE, action) => {
     };
   case 'SET_PLAYER':
     return action.payload;
-  case 'REQUEST_TRIVIA_API':
-    return {
-      ...state,
-      isFetching: action.payload.isFetching,
-    };
-  case 'REQUEST_TRIVIA_API_SUCCESS':
-    return {
-      ...state,
-      isFetching: action.payload.isFetching,
-      query: action.payload.query,
-    };
-  case 'REQUEST_TRIVIA_API_ERROR':
-    return {
-      ...state,
-      isFetching: action.payload.isFetching,
-      error: action.payload.error,
-    };
   case 'POINTS_PLAYER':
     return {
       ...state,
@@ -44,6 +27,7 @@ const player = (state = INITIAL_PLAYER_STATE, action) => {
     return {
       ...state,
       score: action.payload.score,
+      assertions: state.assertions + 1,
     };
 
   default:

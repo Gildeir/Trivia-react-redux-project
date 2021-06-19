@@ -20,6 +20,7 @@ class App extends React.Component {
             <Route exact path="/" component={ Login } />
             <Route path="/header" component={ Header } />
             <Route path="/settings" component={ Settings } />
+            <Route path="/feedback" component={ Feedback } />
             <Route path="/trivia/:game" render={ (props) => <Game { ...props } /> } />
             <Route path="/feedback" component={ Feedback } />
           </Switch>
