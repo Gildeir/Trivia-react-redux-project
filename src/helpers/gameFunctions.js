@@ -2,7 +2,7 @@ export function setPlayerLocalStorage(answerPoints, player) {
   // let playerAux = { ...player };
   // playerAux = { ...playerAux, score: answerPoints };
   localStorage.setItem('state',
-    JSON.stringify({ player: { ...player, score: answerPoints } }));
+    JSON.stringify({ player: { ...player, score: answerPoints, assertions: player.assertions + 1 } }));
 }
 
 export function difficultyFormula(difficulty) {
