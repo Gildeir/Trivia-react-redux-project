@@ -10,6 +10,7 @@ import history from './history';
 import Settings from './pages/Settings';
 import Game from './pages/Game';
 import Feedback from './pages/Feedback';
+import Ranking from './pages/Ranking';
 
 class App extends React.Component {
   render() {
@@ -23,6 +24,7 @@ class App extends React.Component {
             <Route path="/feedback" component={ Feedback } />
             <Route path="/trivia/:game" render={ (props) => <Game { ...props } /> } />
             <Route path="/feedback" component={ Feedback } />
+            <Route path="/ranking" component={ Ranking } />
           </Switch>
         </Router>
       </Provider>
