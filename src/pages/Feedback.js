@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import md5 from 'crypto-js/md5';
 import Header from '../components/Header';
 import history from '../history';
 
@@ -9,6 +10,28 @@ class Feedback extends Component {
     super(props);
     this.renderMessage = this.renderMessage.bind(this);
     this.renderResults = this.renderResults.bind(this);
+    this.saveScoreToRankingPage = this.saveScoreToRankingPage.bind(this);
+  }
+
+  componentDidMount() {
+    this.saveScoreToRankingPage();
+  }
+
+  saveScoreToRankingPage() {
+    const { name, score, emailDoUsuário } = this.props;
+    const hash = md5(emailDoUsuário).toString();
+    const picture = `https://www.gravatar.com/avatar/${hash}`;
+
+    const rankingData = localStorage.getItem('ranking');
+    const parsedRankingData = JSON.parse(rankingData);
+
+    const ranking = { name, score, picture };
+
+    if (parsedRankingData === null) {
+      return localStorage.setItem('ranking', JSON.stringify([ranking]));
+    }
+
+    localStorage.setItem('ranking', JSON.stringify([...parsedRankingData, ranking]));
   }
 
   renderMessage() {
@@ -52,14 +75,16 @@ class Feedback extends Component {
   }
 }
 Feedback.propTypes = {
-  assertions: PropTypes.number.isRequired,
   score: PropTypes.number.isRequired,
+  emailDoUsuário: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  assertions: PropTypes.number.isRequired,
 };
-// Feedback.defaultProps = {
-//   assertions: 0,
-// };
+
 const mapStateToProps = (state) => ({
   assertions: state.player.assertions,
   score: state.player.score,
+  emailDoUsuário: state.player.email,
+  name: state.player.name,
 });
 export default connect(mapStateToProps)(Feedback);
