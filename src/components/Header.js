@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import md5 from 'crypto-js/md5';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 class Header extends Component {
   render() {
@@ -32,6 +33,12 @@ class Header extends Component {
             {' '}
           </span>
         </div>
+        <Link
+          to="/ranking"
+          data-testid="btn-ranking"
+        >
+          Ver Ranking
+        </Link>
       </header>
     );
   }
