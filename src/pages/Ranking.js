@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Ranking extends Component {
   constructor(props) {
@@ -42,6 +43,10 @@ class Ranking extends Component {
               ))
           }
         </div>
+
+        <Link to="/" data-testid="btn-go-home">
+          Ir para a home
+        </Link>
       </div>
     );
   }
